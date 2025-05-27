@@ -1,0 +1,88 @@
+---
+title: "Manual"
+description: "Doppler SDK manual integration"
+icon: "code"
+---
+
+Once you have created an account on [Doppler](https://askdoppler.com) and created an API Key, you can proceed with the next steps.
+
+## Installation
+
+Pick your package manager and install the core SDK.
+
+<CodeGroup>
+
+```json npm
+npm install @askdoppler/core
+```
+
+```json yarn
+yarn add @askdoppler/core
+```
+
+```json pnpm
+pnpm add @askdoppler/core
+```
+
+```json bun
+bun add @askdoppler/core
+```
+
+</CodeGroup>
+
+## Setup
+
+Make sure to define the following environment variable to store your API Key.
+
+```bash
+DOPPLER_API_KEY=your-api-key
+```
+
+## Usage
+
+The core SDK exposes 2 methods:
+
+- `getSource`
+- `logCrawl`
+
+The SDK is designed to sit in a middleware layer and be called on every request, then passing the URL & headers to the `getSource` function and based on the result, you can call the `logCrawl` function to log the traffic data to Doppler's API.
+Ideally you don't await logCrawl in order not to slow down your request.
+
+### getSource
+
+The `getSource(headers: Record<string, string>, url: string)` function analyzes incoming requests to detect the traffic source. It accepts a request object with headers and URL, and returns a `DopplerDetectionResult` object.
+
+#### Parameters
+
+#### Return type
+
+```typescript
+interface DopplerDetectionResult {
+  source: string | null; // The detected source (e.g., 'openai', 'perplexity', 'google', 'bing')
+  intent: string | null; // The user's intent ('browse' or 'search')
+  type: string | null; // The type of detection ('click' or 'crawl')
+  highlightedText: string | null; // Any highlighted text from the URL fragment
+  detected: boolean; // Whether a source was detected
+}
+```
+
+### logCrawl
+
+The `logCrawl(payload: DopplerCrawlPayload)` function sends traffic data to Doppler's API. It accepts a payload object and an optional API key.
+
+#### Parameters
+
+```typescript
+interface DopplerCrawlPayload {
+  url: string; // The URL being crawled
+  source: string; // The traffic source
+  intent: string; // The user's intent
+  type: string; // The type of detection
+  highlightedText?: string; // Optional highlighted text
+  timestamp?: number; // Optional timestamp
+}
+```
+
+## Test
+
+To test that your setup is correctly working you can try asking [ChatGPT](https://chatgpt.com) or [Perplexity](https://www.perplexity.ai) to search for your websites URL. Data should start showing up right after your request.

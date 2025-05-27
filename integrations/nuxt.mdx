@@ -1,0 +1,61 @@
+---
+title: "Nuxt"
+description: "Doppler SDK Nuxt integration"
+icon: "mountain"
+---
+
+Once you have created an account on [Doppler](https://askdoppler.com) and created an API Key, you can proceed with the next steps.
+
+## Installation
+
+Pick your package manager and install the SDK.
+
+<CodeGroup>
+
+```json npm
+npm install @askdoppler/nuxt
+```
+
+```json yarn
+yarn add @askdoppler/nuxt
+```
+
+```json pnpm
+pnpm add @askdoppler/nuxt
+```
+
+```json bun
+bun add @askdoppler/nuxt
+```
+
+</CodeGroup>
+
+## Nuxt configuration
+
+Edit `nuxt.config.ts` and add the following code:
+
+1. Append `@askdoppler/nuxt` to the `modules` array like so:
+
+```ts nuxt.config.ts
+modules: [
+  "@askdoppler/nuxt", // place first or in early positions if can't place first
+  // ... other modules
+];
+```
+
+<Warning>
+  Try to place it as early as possible in the `modules` array to ensure the
+  middleware is prioritized.
+</Warning>
+
+2. Add the following configuration object to your `nuxt.config.ts` file:
+
+```json nuxt.config.ts
+doppler: {
+  apiKey: "your-api-key"
+}
+```
+
+## Test
+
+To test that your setup is correctly working you can try asking [ChatGPT](https://chatgpt.com) or [Perplexity](https://www.perplexity.ai) to search for your websites URL. Data should start showing up right after your request.
